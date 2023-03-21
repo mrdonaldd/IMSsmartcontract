@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON-JS</title>
+  </head>
+  <body>
+    <h1>countries: a long list</h1>
+    <div id="country"></div>
+    <script>
+      function fetchData() {
+  fetch('countries.json')
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+      let output = '<h2">Countries</h2>'
+      data.forEach(function (item) {
+        output += `
+        <ul>
+          <li>Country: ${item.Country}</li>
+          <li>CODE: ${item.ISO2}</li>
+        </ul>
+      `
+      })
+      document.getElementById('country').innerHTML = output
+    })
+    .catch((error) => {
+      console.log(`Error Fetching data : ${error}`)
+      document.getElementById('country').innerHTML = 'Error Loading Data'
+    })
+}
+
+fetchData()
+
+    </script>
+  </body>
+</html>

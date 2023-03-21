@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+ <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+</head>
+<body>
+
+  <ul id="result"></ul>
+
+<script>
+function renderItem(itemData) {
+  const title = $('<p/>').text(' Test : ' + itemData.socGroup);
+  //  const percentage = $('<p/>').text('Percentage of Occupancies in Area: '+ new Number(itemData.percentage).toFixed(2) + '%');
+   const item = $('<li/>').append(title);
+  $('#result').append(item);
+}
+
+$(function() {
+ $.ajax({
+ url: "http://api.lmiforall.org.uk/api/v1/census/jobs_breakdown?area=55.9895989531941,-3.796229726988194",
+ type: "get",
+ dataType: "json",
+ success: function(data) {
+  data.jobsBreakdown.forEach(renderItem);
+ }
+ });
+});
+
+</script>
+</body>
+</html>
