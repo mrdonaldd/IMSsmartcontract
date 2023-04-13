@@ -67,8 +67,8 @@
       </li><!-- End Components Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="search.html">
-          <i class="bi bi-journal-text"></i><span>Search</span>
+        <a class="nav-link collapsed" href="check.html">
+          <i class="bi bi-journal-text"></i><span>Check</span>
         </a>
       </li><!-- End Forms Nav -->
 
@@ -113,13 +113,16 @@
                       <i class="bi bi-cart"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>145</h6>
+                      <h6 id="weather-conditions"> </h6>
                     </div>
                   </div>
                 </div>
 
               </div>
             </div><!-- End Sales Card -->
+          </div>
+        </div>
+
 
 
       </div>
@@ -143,6 +146,19 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    window.addEventListener("load", function() {
+      fetch("http://localhost:3502/totalinvoice").then( function(response) {
+          response.json().then( function(json) {
+            const div = document.getElementById("weather-conditions");
+            // Add HTML that includes the JSON data
+            div.innerHTML = `
+                ${json.Total}</li>
+            `;
+          });
+      });
+    });
+  </script>
 
 </body>
 

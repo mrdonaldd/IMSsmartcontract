@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>File upload using AJAX (+jQuery) / Demo</title>
+	</head>
+	<body>
+		<form id="form-demo" onsubmit="return false">
+         <input type="text" id="ID" name="ID"><br><br>
+			<input type="file" id="file" name="file"><br><br>
+			<button id="button-send">Send</button>
+		</form>
+		<script src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
+		<script>
+			/*
+			 * For demonstration porpuse, all JavaScript code was incorporated in
+			 * the HTML file. But when developing your application, your JavaScript code
+			 * should be in a separated file. Check this page for more information:
+			 * https://developer.yahoo.com/performance/rules.html#external
+			 */
+
+			$("#button-send").click(sendFormData);
+
+			function sendFormData(){
+				var formData = new FormData($("#form-demo").get(0));
+
+				var ajaxUrl = "http://127.0.0.1:3502/uploadfile/";
+
+				$.ajax({
+					url : ajaxUrl,
+					type : "POST",
+					data : formData,
+					// both 'contentType' and 'processData' parameters are
+					// required so that all data are correctly transferred
+					contentType : false,
+					processData : false
+				}).done(function(response){
+					// In this callback you get the AJAX response to check
+					// if everything is right...
+				}).fail(function(){
+					// Here you should treat the http errors (e.g., 403, 404)
+				}).always(function(){
+					alert("AJAX request finished!");
+				});
+			}
+		</script>
+	</body>
+</html>

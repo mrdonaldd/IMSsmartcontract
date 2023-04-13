@@ -106,40 +106,37 @@
                   <button title="Search" id="val-btn"><i class="bi bi-search"></i></button>
                 </div>
               </div> -->
-              <form method="post" action="create.html">
+
                 <div class="row mb-3">
-                  <div class="col-sm-4">
+                  <!-- <div class="col-sm-4">
                     <select class="form-control" id="sel1">
                       <option>--choose--</option>
                       <option>Invoice ID</option>
                       <option>Invoice Value</option>
                     </select>
+                  </div> -->
+                  <div class="col-sm-10 col-xs-12">
+                    <input type="text" id="invoice-val" class="form-control" required>
                   </div>
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label class="col-sm-6 col-form-label"></label>
-                  <div class="col-sm-6">
-                    <button id="createbtn" type="submit" style="float: right;" class="btn btn-primary">Submit</button>
+                  <div class="col-sm-2 col-xs-12">
+                    <button id="val-btn" type="submit" class="btn btn-primary btn-block">Submit</button>
                   </div>
                 </div>
 
-              </form><!-- End General Form Elements -->
+
 
 
             </div>
           </div>
 
-          <div class="card">
+          <!-- <div class="card">
             <div class="card-body">
               <h5 class="card-title"><span style="font-weight: bold; color: cadetblue;">Invoice ID</span> MIT-20230322-001</h5>
-              <h5 class="card-title"><span style="font-weight: bold; color: cadetblue;">Invoice value</span> 3cd5d2cc9616fe54bdbf930ab9084d6f601fac8426a131b5b4a9962148c88a73</h5>
+              <h5 class="card-title"><span style="font-weight: bold; color: cadetblue;">Invoice value</span> 123456789</h5>
             </div>
-          </div>
+          </div> -->
 
-
+          <div id="result-val"></div>
 
         </div>
       </div>
@@ -172,10 +169,10 @@
     //Function to fetch data from API
     let getInvoice = () => {
       let invoiceID = invoiceIDRef.value;
-      let url = `http://www.omdbapi.com/?t=${invoiceID}&apikey=${key}`;
+      let url = `http://localhost:3502/validatedata`;
       //If input field is empty
       if (invoiceID.length <= 0) {
-        result.innerHTML = `<h3 class="msg">Please Enter Invoice ID</h3>`;
+        result.innerHTML = `<div class="card"><div class="card-body"><h5 class="card-title">Please Enter Invoice ID or Invoice Value</h5></div></div>`;
       }
       //If input field is NOT empty
       else {
@@ -187,28 +184,10 @@
               result.innerHTML = `
               <div class="card">
                 <div class="card-body">
-                  <div class="info">
-                    <img src=${data.Poster} class="poster">
-                    <div>
-                        <h2>${data.Title}</h2>
-                        <div class="rating">
-                            <img src="star-icon.svg">
-                            <h4>${data.imdbRating}</h4>
-                        </div>
-                        <div class="details">
-                            <span>${data.Rated}</span>
-                            <span>${data.Year}</span>
-                            <span>${data.Runtime}</span>
-                        </div>
-                        <div class="genre">
-                            <div>${data.Genre.split(",").join("</div><div>")}</div>
-                        </div>
-                    </div>
-                  </div>
-                  <h3>Plot:</h3>
-                  <p>${data.Plot}</p>
-                  <h3>Cast:</h3>
-                  <p>${data.Actors}</p>
+                  <h3>Invoice ID:</h3>
+                  <p>${data.id}</p>
+                  <h3>Invoice Value:</h3>
+                  <p>${data.value}</p>
                 </div>
               </div>
 
@@ -217,12 +196,12 @@
             //If Invoice does NOT exists in database
             else {
               // result.innerHTML = `<h3 class='msg'>${data.Error}</h3>`;
-              result.innerHTML = `<h3 class='msg'>Invoice ID NOT FOUND!</h3>`;
+              result.innerHTML = `<div class="card"><div class="card-body"><h5 class="card-title">Invoice ID or Invoice Value NOT FOUND!</h5></div></div>`;
             }
           })
           //If error occurs
           .catch(() => {
-            result.innerHTML = `<h3 class="msg">Error Occured</h3>`;
+            result.innerHTML = `<div class="card"><div class="card-body"><h5 class="card-title">Error occured</h5></div></div>`;
           });
       }
     };
