@@ -16,7 +16,7 @@ ganache_url = "http://127.0.0.1:8545"
 web3 = Web3(Web3.HTTPProvider(ganache_url))
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
 abiContract = json.loads('[{"inputs":[{"internalType":"string","name":"_id","type":"string"},{"internalType":"string","name":"_value","type":"string"}],"name":"add","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_id","type":"string"}],"name":"_checkID","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_value","type":"string"}],"name":"_checkValue","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_id","type":"string"},{"internalType":"string","name":"_value","type":"string"}],"name":"checkmatch","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_value","type":"string"}],"name":"getID","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getSizeID","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_id","type":"string"}],"name":"getValue","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_id","type":"string"},{"internalType":"string","name":"_value","type":"string"}],"name":"isCreateInvoice","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"}]')
-addressContract = web3.toChecksumAddress('0xcb50EdE077e277378eCb1620ec1A596e0fE1D02d') # FILL ME IN
+addressContract = web3.toChecksumAddress('0x32D17bb6dF68C11b339387b74BAF88ecE230B211') # FILL ME IN
 contract = web3.eth.contract(address=addressContract, abi=abiContract)
 
 def getSizeID():
@@ -60,7 +60,8 @@ app = FastAPI()
 
 origins = [
     "http://localhost:5500",
-    "http://localhost:3502"
+    "http://localhost:3502",
+    "http://127.0.0.1:5500"
 ]
 
 app.add_middleware(
@@ -94,7 +95,7 @@ async def createInvoice(payload: dict = Body(...)):
 @app.post("/uploadfile/")
 async def create_upload_file(ID: str = Form(...),file: UploadFile = File(...)):
    data = file.file.read()
-   hash = hashlib.sha256(data) 
+   hash = hashlib.sha256(data)
    _id = ID
    _value = hash.hexdigest()
    canCreate = isCreateInvoice(_id,_value)
@@ -105,31 +106,31 @@ async def create_upload_file(ID: str = Form(...),file: UploadFile = File(...)):
        return {'create':'Fail'}
 
 @app.post("/searchwithid")
-async def searchWithID(payload: dict = Body(...)):
-    _id = payload['id']
+async def searchWithID(ID: str = Form(...)):
+    _id = ID
     isData = checkIDInvoice(_id)
     if (isData):
-        return {'Data Hash of this InvoiceID ' : getValue(_id)}
+        return getValue(_id)
     else :
-        return False
+        return 'INVOICE ID NOT MATCH'
 
 
 
 @app.post("/checkid")
-async def checkID(payload: dict = Body(...)):
-    _id = payload['id']
-    return { 'Is there an ID in the system? ':checkIDInvoice(_id)}
+async def checkID(ID: str = Form(...)):
+    _id = ID
+    return checkIDInvoice(_id)
 
 
 @app.post("/validatedata")
-async def ValidateData_api(payload: dict = Body(...)):
-    _id = payload['id']
-    _value = payload['value']
+async def ValidateData_api(ID: str = Form(...),VALUE: str = Form(...)):
+    _id = ID
+    _value = VALUE
     ValidateData(_id,_value)
     if (ValidateData(_id,_value)):
-        return {'Does the information match? ':True}
+        return 'MATCH'
     else:
-        return {'Does the information match? ':False}
+        return 'NOT MATCH'
 
 # @app.post("/getdatawithid")
 # async def getDataWithID(payload: dict = Body(...)):
@@ -137,8 +138,8 @@ async def ValidateData_api(payload: dict = Body(...)):
 #     return { 'Data Invoice is ':getValue(_id)}
 
 @app.post("/getdidwithdata")
-async def getIDWithData(payload: dict = Body(...)):
-    _value = payload['value']
+async def getIDWithData(VALUE: str = Form(...)):
+    _value = VALUE
     isID = getID(_value)
     if (isID == 'null'):
         return False

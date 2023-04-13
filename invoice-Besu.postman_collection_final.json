@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "da037ed5-e833-4733-ae3b-0ef01f909a90",
+		"_postman_id": "761390aa-59a7-4acb-bfde-46ab7fc6eb47",
 		"name": "invoice-Besu",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8978116"
 	},
 	"item": [
 		{
@@ -159,6 +160,50 @@
 					"port": "3502",
 					"path": [
 						"validatedata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Uploadfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "ID",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"contentType": "application/pdf",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:3502/uploadfile/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3502",
+					"path": [
+						"uploadfile",
+						""
 					]
 				}
 			},
